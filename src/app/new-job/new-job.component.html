@@ -1,0 +1,320 @@
+<div class="alert alert-danger" *ngIf="invalidVid" role="alert">
+    Please enter a valid ID!
+</div>
+
+<form action="#">
+  <div class="form-row">
+    <div class="col-sm">
+      <label for="url">Enter what you want to download below to create a new Job</label>
+      <input type="text" name="url" class="form-control" autocomplete="off" placeholder=" enter a URL" (input)="onUpdateInput()" [(ngModel)]="url" [disabled]="!urlInputActive">
+      <small id="form_url" class="form-text text-muted">URL to download</small>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col-sm">
+      <input type="text" name="vid" class="form-control" autocomplete="off" placeholder="enter a Video ID" (input)="onUpdateInput()" [(ngModel)]="vid" [disabled]="!vidInputActive">
+      <small id="form_vid" class="form-text text-muted">Video ID to download</small>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="col-sm">
+      <input type="text" name="pid" class="form-control" autocomplete="off" placeholder="enter a Playlist ID" (input)="onUpdateInput()" [(ngModel)]="pid" [disabled]="!pidInputActive">
+      <small id="form_pid" class="form-text text-muted">Playlist ID to download</small>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="col-sm">
+      <input type="text" name="search" class="form-control" autocomplete="off" placeholder="Search online" (input)="onUpdateInput()" [(ngModel)]="search" [disabled]="!searchInputActive">
+      <small id="form_search" class="form-text text-muted">Search string to search for online</small>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="col-sm" style="margin-top: 20px">
+      <button type="submit" class="btn btn-primary" (click)="analyse()" data-toggle="modal" data-target="#analyse">Analyse</button>
+      <button type="reset" class="btn btn-danger float-right" (click)="onResetInput()">Reset</button>
+    </div>
+  </div>
+
+  <hr>
+
+</form>
+
+<div class="modal fade" id="analyse" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+
+    <!--- entered a valid VID -->
+    <div class="modal-content" *ngIf="validVid">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">selected Video</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-row">
+          <div class="col-sm">
+            <input type="text" id="source" class="form-control" autocomplete="off" placeholder="Download Source" [(ngModel)]="source" readonly>
+            <small id="small_source" class="form-text text-muted">Download Source</small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="col-sm">
+            <input type="text" id="title" class="form-control" autocomplete="off" placeholder="Title" [(ngModel)]="title">
+            <small id="small_title" class="form-text text-muted">modify the Video Titel if needed</small>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="form-row">
+          <div class="col-sm"> 
+            <input type="text" name="tagArtist" class="form-control" autocomplete="off" placeholder="Artist" [(ngModel)]="tagArtist">
+            <small id="form_pid" class="form-text text-muted">Artist of the File (plex/Artist)</small>
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="col-sm"> 
+            <input type="text" name="tagAlbum" class="form-control" autocomplete="off" placeholder="Album" [(ngModel)]="tagAlbum">
+            <small id="form_pid" class="form-text text-muted">Album of the File (plex/Artit/Album)</small>
+            <label><input type="checkbox" name="tagForce" class="checkbox" [(ngModel)]="tagForce">Force</label>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" data-dismiss="modal">Start</button>
+      </div>
+    </div>
+
+    <!--- entered a valid PID -->
+    <div class="modal-content" *ngIf="validPid">
+      <form name="playlistSelection" action="#">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Playlist</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <div class="row">
+            <div class="col-sm-10">
+              <input type="text" name="playlistTitle" id="playlistTitle" class="form-control" autocomplete="off" placeholder="Playlist Ttile" [(ngModel)]="searchResultPlaylistInfo[0].snippet.title">
+              <small id="small_source" class="form-text text-muted">Playlist Title</small>
+              <input type="text" name="source" id="source" class="form-control" autocomplete="off" placeholder="Download Source" [(ngModel)]="source" readonly>
+              <small id="small_source" class="form-text text-muted">Download Source</small>
+            </div>
+            <div class="col-sm-2">
+              <span>
+                <img [src]="searchResultPlaylistInfo[0].snippet.thumbnails.medium.url" [alt]="searchResultPlaylistInfo[0].snippet.title" class="img-responsive" style="max-width: 100%;">
+              </span>
+            </div>
+          </div>
+          <div class="row" style="margin-top: 15px; margin-bottom: 10px">
+            <div class="col-sm-6">
+              <span style="vertical-align: text-bottom">Playlist content:</span>
+            </div>
+            <div class="col-sm-6">
+              <button type="button" style="margin-left: 5px" class="btn btn-danger float-right" data-dismiss="modal">Close</button>
+              <button type="button" style="margin-left: 5px" class="btn btn-success float-right" (click)="submit()" data-dismiss="modal" [disabled]="countSelected() === 0">Download selection</button>
+              <button type="button" style="margin-left: 5px" class="btn btn-primary float-right"  (click)="selectAll(); listSelectionState = !listSelectionState" *ngIf="listSelectionState">Select all</button>
+              <button type="button" style="margin-left: 5px" class="btn btn-warning float-right" (click)="selectAll(); listSelectionState = !listSelectionState" *ngIf="!listSelectionState">Select none</button>
+            </div>
+          </div>
+        
+          <div [ngClass]="{ 'card': true, 'shadow': true, 'mb-3': true, 'bg-white': true, 'border-success': result.selected }" *ngFor="let result of searchResultPlaylistItems">
+          
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-8">
+                  <div class="row">
+                    <div class="col-sm">
+                      <input type="text" name="videoTitle" class="form-control" autocomplete="off" [(ngModel)]="result.snippet.title">
+                      <small class="form-text text-muted">Video Title</small>
+                      <input type="text" name="videoId" class="form-control" autocomplete="off" [(ngModel)]="result.snippet.resourceId.videoId" readonly>
+                      <small class="form-text text-muted">Video ID</small>      
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="row">
+                    <div class="col-sm">
+                      <img [src]="result.snippet.thumbnails.medium.url" [alt]="result.snippet.title" (click)="result.selected = !result.selected" class="img-responsive" style="max-width: 100%;">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm text-center" style="margin-top: 10px">
+                      <button type="button" [ngClass]="{'btn': true, 'center-block': true, 'btn-success': result.selected, 'btn-light': !result.selected }" (click)="result.selected = !result.selected">Select<span *ngIf="result.selected">ed</span></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          </div>
+        </div>
+
+        <div class="modal-footer">
+        </div>
+      </form>
+    </div>
+
+    <!--- entered a valid search -->
+    <div class="modal-content" *ngIf="validSearch">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Live Search</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+  
+            <div class="row" style="margin-top: 15px; margin-bottom: 10px">
+              <div class="col-sm-6">
+                <span style="vertical-align: text-bottom">Search Results:</span>
+              </div>
+              <div class="col-sm-6">
+                <button type="button" style="margin-left: 5px" class="btn btn-danger float-right" data-dismiss="modal">Close</button>
+                <button type="button" style="margin-left: 5px" class="btn btn-success float-right" (click)="submit()" data-dismiss="modal" [disabled]="countSelected() === 0">Download selection</button>
+                <button type="button" style="margin-left: 5px" class="btn btn-primary float-right" (click)="selectAll(); listSelectionState = !listSelectionState" *ngIf="listSelectionState">Select all</button>
+                <button type="button" style="margin-left: 5px" class="btn btn-warning float-right" (click)="selectAll(); listSelectionState = !listSelectionState" *ngIf="!listSelectionState">Select none</button>
+              </div>
+            </div>
+          
+            <div [ngClass]="{ 'card': true, 'shadow': true, 'mb-3': true, 'bg-white': true, 'border-success': result.selected }" *ngFor="let result of searchResultStringItems">
+            
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <div class="row">
+                      <div class="col-sm">
+                        <input type="text" name="videoTitle" class="form-control" autocomplete="off" [(ngModel)]="result.snippet.title">
+                        <small class="form-text text-muted">Video Title</small>
+                        <input type="text" name="videoId" class="form-control" autocomplete="off" [(ngModel)]="result.id" readonly>
+                        <small class="form-text text-muted">Video ID</small>      
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="row">
+                      <div class="col-sm">
+                        <img [src]="result.snippet.thumbnails.medium.url" [alt]="result.snippet.title" (click)="result.selected = !result.selected" class="img-responsive" style="max-width: 100%;">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm text-center" style="margin-top: 10px">
+                        <button type="button" [ngClass]="{'btn': true, 'center-block': true, 'btn-success': result.selected, 'btn-light': !result.selected }" (click)="result.selected = !result.selected">Select<span *ngIf="result.selected">ed</span></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+  
+          <div class="modal-footer">
+          </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+    <div class="modal-content" *ngIf="validSearch">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Online Search</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="form-row" style="margin-top: 15px; margin-bottom: 10px">
+          <div class="col-sm-6">
+            <span style="vertical-align: text-bottom">Search Results:</span>
+          </div>
+          <div class="col-sm-6">
+            <button type="button" class="btn btn-primary float-right" (click)="selectAll(); listSelectionState = !listSelectionState" *ngIf="listSelectionState">Select all</button>
+            <button type="button" class="btn btn-warning float-right" (click)="selectAll(); listSelectionState = !listSelectionState" *ngIf="!listSelectionState">Select none</button>
+          </div>
+        </div>
+
+        <div [ngClass]="{ 'card': true, 'shadow': true, 'mb-3': true, 'bg-white': true, 'border-success': result.selected }" *ngFor="let result of searchResultStringItems">
+  
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-8">
+                <div class="row">
+                  <div class="col-sm">
+                    <input type="text" class="form-control" autocomplete="off" [(ngModel)]="result.snippet.title">
+                    <small class="form-text text-muted">Video Title</small>
+                    <input type="text" class="form-control" autocomplete="off" [(ngModel)]="result.id.videoId" readonly>
+                    <small class="form-text text-muted">Video ID</small>      
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="row">
+                  <div class="col-sm">
+                    <img [src]="result.snippet.thumbnails.medium.url" [alt]="result.snippet.title" class="img-responsive" style="max-width: 100%;">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm text-center" style="margin-top: 10px">
+                    <button type="button" [ngClass]="{'btn': true, 'center-block': true, 'btn-success': result.selected, 'btn-light': !result.selected }" (click)="result.selected = !result.selected">Download</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+         
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="submit()">Start</button>
+      </div>
+    </div> -->
+
+    <!--- entered valid bullshit -->
+    <div class="modal-content" *ngIf="!validInput()">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Aw snap ...</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm">
+            You entered something wrong
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>

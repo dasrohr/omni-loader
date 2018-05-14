@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+
+  selectedView :String = 'home';
+
+  changeView(selection: string) {
+    this.selectedView = selection;
+  }
+
 }

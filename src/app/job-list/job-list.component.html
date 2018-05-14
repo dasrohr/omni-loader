@@ -1,0 +1,147 @@
+<div class="col-sm">
+  <div class="row" style="margin-bottom: 10px">
+    <div class="col">
+      <h3 style="margin-bottom: 0px">Active Tasks</h3>
+    </div>
+    <div class="col">
+      <button type="button" [ngClass]="{'btn': true, 'float-right': true, 'btn-warning': !autoReload, 'btn-success': autoReload}" style="margin-left: 5px" data-toggle="button" (click)="autoReload = !autoReload" [attr.aria-pressed]="autoReload" autocomplete="off">Auto Reload</button>
+      <button type="button" class="btn btn-secondary float-right" (click)="getTasks(true)">Reload</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <div class="progress" *ngIf="activeRefresh()" style="margin-bottom: 10px">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">Loading ...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow p-4 mb-4 bg-white border-success" *ngIf="activeTasks.length === 0">
+  <div class="row">
+      <div class="col-sm">
+        <h5 class="card-title float-left my-auto">No Active Tasks</h5>
+      </div>
+  </div>
+</div>
+<div class="div" *ngIf="activeTasks.length !== 0">
+  <div class="card shadow p-4 mb-4 bg-white border-success" *ngFor="let aTask of activeTasks">
+
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm">
+          <h4 class="card-title float-left">{{ aTask.args.data.title }}</h4>
+          <button type="button" class="btn btn-light btn-sm float-right" data-toggle="modal" [attr.data-target]="'#' + 'modal' + aTask.id">Details</button>
+          <div class="modal fade" [attr.id]="'modal' + aTask.id" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Details</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="col-sm">
+                    <div class="table-responsive">
+                      <table class="table">
+                        <tbody>
+                          <tr>
+                            <td>Title</td>
+                            <td>{{ aTask.args.data.title }}</td>
+                          </tr>
+                          <tr>
+                            <td>ID</td>
+                            <td>{{ aTask.args.data.id }}</td>
+                          </tr>
+                          <tr>
+                            <td>Playlist</td>
+                            <td>{{ aTask.args.playlist }}</td>
+                          </tr>
+                          <tr>
+                            <td>Path</td>
+                            <td>{{ aTask.args.albart }}/{{ aTask.args.alb }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="col-sm my-auto">
+  <h3>Waiting Tasks</h3>
+</div>
+<div class="card shadow p-4 mb-4 bg-white border-success" *ngIf="queuedTasks.length === 0">
+  <div class="row">
+      <div class="col-sm">
+        <h5 class="card-title float-left my-auto">No Waiting Tasks</h5>
+      </div>
+  </div>
+</div>
+<div class="div" *ngIf="queuedTasks.length !== 0">
+  <div class="card shadow p-4 mb-4 bg-white border-warning" *ngFor="let qTask of queuedTasks">
+
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm">
+          <h4 class="card-title float-left">{{ qTask.args.data.title }}</h4>
+          <button type="button" class="btn btn-light btn-sm float-right" data-toggle="modal" [attr.data-target]="'#' + 'modal' + qTask.id">Details</button>
+          <div class="modal fade" [attr.id]="'modal' + qTask.id" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Details</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="col-sm">
+                    <div class="table-responsive">
+                      <table class="table">
+                        <tbody>
+                          <tr>
+                            <td>Title</td>
+                            <td>{{ qTask.args.data.title }}</td>
+                          </tr>
+                          <tr>
+                            <td>ID</td>
+                            <td>{{ qTask.args.data.id }}</td>
+                          </tr>
+                          <tr>
+                            <td>Playlist</td>
+                            <td>{{ qTask.args.playlist }}</td>
+                          </tr>
+                          <tr>
+                            <td>Path</td>
+                            <td>{{ qTask.args.albart }}/{{ qTask.args.alb }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
