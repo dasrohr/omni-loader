@@ -14,7 +14,7 @@ export class HistoryComponent implements OnInit {
   history : {}[];
 
   ngOnInit() {
-    this.http.get('http://localhost:3000/history').subscribe((data:any) => {
+    this.http.get('http://die-vvj.de:3000/history').subscribe((data:any) => {
       this.history = data;
     })
   }

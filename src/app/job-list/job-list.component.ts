@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import { environment } from '../../environments/environment';
+
 @Component({
   selector: 'app-job-list',
   templateUrl: './job-list.component.html',
   styleUrls: ['./job-list.component.css']
 })
 export class JobListComponent implements OnInit {
+  apiRoot : string = environment.apiProtocol + '://' + environment.apiHost + ':' + environment.apiPort;
+
   activeTasks = [];
   queuedTasks = [];
   loadingTasks : boolean = false;
@@ -25,7 +29,7 @@ export class JobListComponent implements OnInit {
   getTasks(enabled: boolean) {
     if (!this.loadingTasks && enabled) {
       this.loadingTasks = true;
-      this.http.get('http://die-vvj.de:3000/task/queue/status').subscribe((data:any) => {
+      this.http.get(this.apiRoot + '/task/queue/all').subscribe((data:any) => {
         if (data.data.active.length > 0 || data.data.queued.length > 0) {
           console.log(data);
           this.activeTasks = data.data.active;

@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import { environment } from '../../environments/environment';
+
+
 @Component({
   selector: 'app-new-job',
   templateUrl: './new-job.component.html',
   styleUrls: ['./new-job.component.css']
 })
 export class NewJobComponent implements OnInit {
-  apiKey : String = 'AIzaSyDKD9Dk8B1Jvbzu1xc10KRgmFoNZ1tfZgs';
+  apiKeys : any = environment.apiKeys;
+  apiRoot : string = environment.apiProtocol + '://' + environment.apiHost + ':' + environment.apiPort;
 
   urlInputActive = true;
   vidInputActive = true;
@@ -89,7 +93,7 @@ export class NewJobComponent implements OnInit {
     if (this.url) {
       console.log('analyse url')
     } else if (this.vid) {
-      this.http.get('https://www.googleapis.com/youtube/v3/videos?id=' + this.vid + '&part=snippet&key=' + this.apiKey)
+      this.http.get('https://www.googleapis.com/youtube/v3/videos?id=' + this.vid + '&part=snippet&key=' + this.apiKeys.youtube)
       .subscribe((data :any) => {
         if(data.pageInfo.totalResults != 0){
           this.validVid = true;
@@ -100,7 +104,7 @@ export class NewJobComponent implements OnInit {
         }
       });
     } else if (this.pid) {
-      this.http.get('https://www.googleapis.com/youtube/v3/playlists?id=' + this.pid + '&part=snippet&maxResults=50&key=' + this.apiKey)
+      this.http.get('https://www.googleapis.com/youtube/v3/playlists?id=' + this.pid + '&part=snippet&maxResults=50&key=' + this.apiKeys.youtube)
       .subscribe((data:any) => {
         if (data.pageInfo.totalResults != 0) {
           this.validPid = true;
@@ -112,7 +116,7 @@ export class NewJobComponent implements OnInit {
         }
       })
 
-      this.http.get('https://www.googleapis.com/youtube/v3/playlistItems?playlistId=' + this.pid + '&part=snippet&maxResults=50&key=' + this.apiKey)
+      this.http.get('https://www.googleapis.com/youtube/v3/playlistItems?playlistId=' + this.pid + '&part=snippet&maxResults=50&key=' + this.apiKeys.youtube)
       .subscribe((data:any) => {
         if (data.pageInfo.totalResults != 0) {
           this.validPid = true;
@@ -124,7 +128,7 @@ export class NewJobComponent implements OnInit {
         }
       })
     } else if (this.search) {
-      this.http.get('https://www.googleapis.com/youtube/v3/search?q=' + this.search + '&type=video&part=snippet&maxResults=5&key=' + this.apiKey)
+      this.http.get('https://www.googleapis.com/youtube/v3/search?q=' + this.search + '&type=video&part=snippet&maxResults=5&key=' + this.apiKeys.youtube)
       .subscribe((data:any) => {
         if (data.pageInfo.totalResults != 0) {
           this.validSearch = true;
@@ -170,7 +174,7 @@ export class NewJobComponent implements OnInit {
         if (this.searchResultPlaylistItems[i].selected) {
           var item = metaData;
           item.data = { id: this.searchResultPlaylistItems[i].snippet.resourceId.videoId, title: this.searchResultPlaylistItems[i].snippet.title, url: 'https://www.youtube.com?v=' + this.searchResultPlaylistItems[i].snippet.resourceId.videoId };
-          this.http.post('http://die-vvj.de:3000/task/download', item, { headers: {'Content-Type': "application/json"} }).subscribe((apiResponse) => {
+          this.http.post(this.apiRoot + '/task/download', item, { headers: {'Content-Type': "application/json"} }).subscribe((apiResponse) => {
           })
         }
       }
@@ -179,7 +183,7 @@ export class NewJobComponent implements OnInit {
         if (this.searchResultStringItems[i].selected) {
           var item = metaData;
           item.data = { id: this.searchResultStringItems[i].id.videoId, title: this.searchResultStringItems[i].snippet.title, url: 'https://www.youtube.com?v=' + this.searchResultStringItems[i].id.videoId };
-          this.http.post('http://die-vvj.de:3000/task/download', item, { headers: {'Content-Type': "application/json"} }).subscribe((apiResponse) => {
+          this.http.post(this.apiRoot + '/task/download', item, { headers: {'Content-Type': "application/json"} }).subscribe((apiResponse) => {
           })
         }
       }
