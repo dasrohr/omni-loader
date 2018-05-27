@@ -10,12 +10,14 @@ import { AppComponent } from './app.component';
 import { JobCreatorComponent } from './job-creator/job-creator.component';
 import { JobSelectorComponent } from './job-creator/job-selector/job-selector.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { HistoryComponent } from './history/history.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/job', pathMatch: 'full' },
   { path: 'job', component: JobCreatorComponent, children: [
     { path: 'select', component: JobSelectorComponent }
   ] },
+  { path: 'history', component: HistoryComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 
@@ -24,7 +26,8 @@ const appRoutes: Routes = [
     AppComponent,
     JobCreatorComponent,
     JobSelectorComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,

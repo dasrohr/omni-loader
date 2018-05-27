@@ -37,9 +37,11 @@ export class JobCreatorComponent implements OnInit {
   onCollectInformation() {
     var id = this.inputForm.value.input;
     var scope = this.inputForm.value.target;
+    var albart = this.inputForm.value.albart;
+    var alb = this.inputForm.value.alb;
     if (id) {
-      this.videoService.callAPI(id, scope, 'yt');
-      this.router.navigate(['select'], {relativeTo: this.route});
+      this.videoService.callAPI(id, scope, undefined, albart, alb);
+      this.router.navigate(['select'], { relativeTo: this.route });
     } else {
       console.log('missing id');
     }

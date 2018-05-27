@@ -1,0 +1,12 @@
+.form-group {
+  margin-bottom: 0.5rem;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: 0rem;
+}
+
+.rounded {
+  border-radius: 1rem!important;
+}

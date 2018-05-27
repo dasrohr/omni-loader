@@ -21,7 +21,7 @@ export class VideoService {
     this.videoDataReceived.emit(this.getVideos());
   }
 
-  callAPI(id: string, scope :string, provider: string) {
+  callAPI(id: string, scope :string, provider: string, albart :string, alb :string) {
 
     var httpParams;
     
@@ -49,7 +49,7 @@ export class VideoService {
           var provider = null;
           var imageUrl = result.snippet.thumbnails.medium.url;
 
-          this.addVideo(new Video(id, title, provider, imageUrl));
+          this.addVideo(new Video(id, title, provider, imageUrl, albart, alb));
         }
       }
       this.apiLoading.emit('loaded');
