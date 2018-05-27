@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('omni-sandbox App', () => {
+describe('omni-loader App', () => {
   let page: AppPage;
 
   beforeEach(() => {

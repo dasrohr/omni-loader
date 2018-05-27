@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "omni-sandbox": {
+    "omni-loader": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -49,18 +49,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "omni-sandbox:build"
+            "browserTarget": "omni-loader:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "omni-sandbox:build:production"
+              "browserTarget": "omni-loader:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "omni-sandbox:build"
+            "browserTarget": "omni-loader:build"
           }
         },
         "test": {
@@ -94,7 +94,7 @@
         }
       }
     },
-    "omni-sandbox-e2e": {
+    "omni-loader-e2e": {
       "root": "",
       "sourceRoot": "",
       "projectType": "application",
@@ -103,7 +103,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "omni-sandbox:serve"
+            "devServerTarget": "omni-loader:serve"
           }
         },
         "lint": {
@@ -120,7 +120,7 @@
       }
     }
   },
-  "defaultProject": "omni-sandbox",
+  "defaultProject": "omni-loader",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
