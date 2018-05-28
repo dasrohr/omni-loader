@@ -11,17 +11,37 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="formInputId">Enter a {{ formText[this.inputForm.value.target] }}:</label>
-            <input id="formInputId" type="text" class="form-control" formControlName="input" [placeholder]="formText[this.inputForm.value.target]">
+            <mat-form-field class="w-max">
+              <input matInput [placeholder]="'Enter a ' + formText[this.inputForm.value.target]" formControlName="input" autocomplete="off">
+            </mat-form-field>
           </div>
+
           <div class="form-group">
-            <label for="formInputId">Enter an Artist (optional):</label>
-            <input type="text" class="form-control" formControlName="albart" placeholder="Artist">
+            <mat-form-field class="w-max">
+              <mat-select placeholder="Select an Artist (optional)" formControlName="albart">
+                <mat-option *ngFor="let albart of albartAvailable" [value]="albart">
+                  {{ albart }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
+
           <div class="form-group">
-            <label for="formInputId">Enter an Album (optional):</label>
-            <input type="text" class="form-control" formControlName="alb" placeholder="Album">
+            <mat-form-field class="w-max">
+              <mat-select placeholder="Select an Album (optional)" formControlName="alb" [disabled]="!this.inputForm.value.albart">
+                <mat-option *ngFor="let alb of albAvailable" [value]="alb">
+                  {{ alb }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
+
+          <!-- <div class="form-group">
+            <label>Enter an Album (optional):</label>
+            <select class="form-control" formControlName="alb">
+              <option *ngFor="let alb of albAvailable" [value]="alb" [disabled]="!this.inputForm.value.albart">{{ albart }}</option>
+            </select>
+          </div> -->
           <div class="form-group">
             <button class="btn btn-primary mr-1" (click)="onCollectInformation()">Search</button>
             <button class="btn btn-danger" type="reset" routerLink="/job">Clear</button>
