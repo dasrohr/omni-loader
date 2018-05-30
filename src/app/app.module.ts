@@ -4,11 +4,17 @@ import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatFormFieldModule } from '@angular/material';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-
-
+import {
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatProgressSpinnerModule,
+  MatSelectModule,
+} from '@angular/material';
 
 import { AlertModule, ButtonsModule } from 'ngx-bootstrap';
 
@@ -44,10 +50,14 @@ const appRoutes: Routes = [
     AlertModule.forRoot(),
     ButtonsModule.forRoot(),
     BrowserAnimationsModule,
-    MatInputModule,
-    MatFormFieldModule,
+    MatAutocompleteModule,
     MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
     MatCheckboxModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
     MatSelectModule,
   ],
   providers: [],
