@@ -12,14 +12,14 @@ export class OmniApiService {
   constructor(private http :HttpClient) {}
 
   getExistingAlbart() {
-    this.http.get( this.apiUrl + '/fs/alb' ).subscribe( ( response :any ) => {
+    this.http.get( this.apiUrl + '/fs/folders' ).subscribe( ( response :any ) => {
       this.albartDataReceived.emit(response.data);
     });
   }
 
   getExistingAlb( albart :string ) {
     console.log('triggered get Album with ', albart)
-    this.http.get( this.apiUrl + '/fs/albart' ).subscribe ( ( response :any ) => {
+    this.http.get( this.apiUrl + '/fs/folders', { params: { depth: albart } } ).subscribe ( ( response :any ) => {
       this.albDataReceived.emit( response.data );
     })
   }
