@@ -4,47 +4,45 @@
         <form [formGroup]="inputForm">
           <div class="form-group">
             <label for="inputFormRadio">Select what you are going to enter:</label>
-            <div id="inputFormRadio" class="btn-group" btnRadioGroup formControlName="target">
-              <label btnRadio="videos" class="btn btn-primary" tabindex="0" role="button">Video ID</label>
-              <label btnRadio="playlistItems" class="btn btn-primary" tabindex="0" role="button">Playlist ID</label>
-              <label btnRadio="search" class="btn btn-primary" tabindex="0" role="button">Live Search</label>
-            </div>
+
+            <mat-button-toggle-group color="warn" formControlName="target">
+              <mat-button-toggle color="warn" value="videos">Video ID</mat-button-toggle>
+              <mat-button-toggle color="warn" value="playlistItems">Playlist ID</mat-button-toggle>
+              <mat-button-toggle color="warn" value="search">Live Search</mat-button-toggle>
+            </mat-button-toggle-group>
+
           </div>
           <div class="form-group">
             <mat-form-field class="w-max">
-              <input matInput [placeholder]="'Enter a ' + formText[this.inputForm.value.target]" formControlName="input" autocomplete="off">
+              <input matInput id='input' [placeholder]="'Enter a ' + formText[this.inputForm.value.target]" formControlName="input" autocomplete="off">
             </mat-form-field>
           </div>
 
           <div class="form-group">
             <mat-form-field class="w-max">
-              <mat-select placeholder="Select an Artist (optional)" formControlName="albart">
+              <input matInput id='albart' placeholder="Select an Artist (optional)" formControlName="albart" [matAutocomplete]="albartSelect">
+              <mat-autocomplete #albartSelect="matAutocomplete" (optionSelected)="this.omniApiService.getExistingAlb(this.inputForm.value.albart)">
                 <mat-option *ngFor="let albart of albartAvailable" [value]="albart">
                   {{ albart }}
                 </mat-option>
-              </mat-select>
+              </mat-autocomplete>
             </mat-form-field>
           </div>
 
           <div class="form-group">
             <mat-form-field class="w-max">
-              <mat-select placeholder="Select an Album (optional)" formControlName="alb" [disabled]="!this.inputForm.value.albart">
+              <input matInput id="alb" placeholder="Select an Album (optional)" formControlName="alb" [matAutocomplete]="albSelect">
+              <mat-autocomplete #albSelect="matAutocomplete">
                 <mat-option *ngFor="let alb of albAvailable" [value]="alb">
                   {{ alb }}
                 </mat-option>
-              </mat-select>
+              </mat-autocomplete>
             </mat-form-field>
           </div>
 
-          <!-- <div class="form-group">
-            <label>Enter an Album (optional):</label>
-            <select class="form-control" formControlName="alb">
-              <option *ngFor="let alb of albAvailable" [value]="alb" [disabled]="!this.inputForm.value.albart">{{ albart }}</option>
-            </select>
-          </div> -->
           <div class="form-group">
-            <button class="btn btn-primary mr-1" (click)="onCollectInformation()">Search</button>
-            <button class="btn btn-danger" type="reset" routerLink="/job">Clear</button>
+            <button mat-raised-button color="primary" class="mr-1" (click)="onCollectInformation()">Search</button>
+            <button mat-button color="warn" routerLink="/job" (click)="formRebuild()">Clear</button>
           </div>
         </form>
       <hr>

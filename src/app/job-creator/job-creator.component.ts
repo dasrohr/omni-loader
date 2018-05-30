@@ -44,7 +44,10 @@ export class JobCreatorComponent implements OnInit {
 
     this.omniApiService.albDataReceived.subscribe( ( data :string[] ) => {
       this.albAvailable = data;
-    })
+    });
+
+    this.inputForm.get('alb').disable();
+    this.formChanges();
   }
 
   onCollectInformation() {
@@ -63,6 +66,28 @@ export class JobCreatorComponent implements OnInit {
   onAlbartSelected() {
     console.log('selected')
     this.omniApiService.getExistingAlb( this.inputForm.value.alb );
+  }
+
+  formRebuild() {
+    this.inputForm.reset({
+      target: 'videos',
+      input: undefined,
+      albart: undefined,
+      alb: undefined
+    });
+    this.albAvailable = [];
+    this.albartAvailable = [];
+    this.omniApiService.getExistingAlbart();
+  }
+
+  formChanges() {
+    this.inputForm.get('albart').valueChanges.subscribe( value => {
+      if ( value ) {
+        this.inputForm.get('alb').enable();
+      } else {
+        this.inputForm.get('alb').disable();
+      }
+    })
   }
 
 }

@@ -2,16 +2,39 @@
   No Results! Please check your Selection and Input!
 </div>
 
-<div *ngIf="loading === 'loading'" class="progress">
+<mat-spinner *ngIf="loading === 'loading'" class="mx-auto"></mat-spinner>
+
+<!-- <div *ngIf="loading === 'loading'" class="progress">
   <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">working ...</div>
-</div>
+</div> -->
 
-<button *ngIf="videos.length !== 0" class="btn btn-primary" (click)="onClick()">Download selected</button>
+<button mat-raised-button color="primary" *ngIf="videos.length !== 0" (click)="onClick()" [disabled]="selectedIds.length === 0">Download selected</button>
 
 <br>
 <br>
 
-<div *ngFor="let video of videos" class="card shadow mb-4 rounded" [class.bg-success]="selectedIds.indexOf(video.id) !== -1">
+<mat-card *ngFor="let video of videos" class="mb-3" [class.bg-success]="selectedIds.indexOf(video.id) !== -1">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-checkbox [id]="video.id"></mat-checkbox>
+    </div>
+    <mat-card-title>{{ video.title }}</mat-card-title>
+    <mat-card-subtitle>Subtitle</mat-card-subtitle>
+  </mat-card-header>
+  <img [src]="video.imageUrl" [alt]="video.title" style="cursor: pointer">
+  <mat-card-content>
+    <p>
+      The Shiba
+    </p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="onSelectVideo(video)">Select</button>
+    <button mat-raised-button color="accent">Edit</button>
+  </mat-card-actions>
+</mat-card>
+
+
+<!-- <div *ngFor="let video of videos" class="card shadow mb-4 rounded" [class.bg-success]="selectedIds.indexOf(video.id) !== -1">
   <div class="card-body">
     <div class="row">
       <div class="col-sm-8">
@@ -37,4 +60,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
