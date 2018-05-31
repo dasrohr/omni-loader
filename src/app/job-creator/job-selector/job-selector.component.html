@@ -4,60 +4,22 @@
 
 <mat-spinner *ngIf="loading === 'loading'" class="mx-auto"></mat-spinner>
 
-<!-- <div *ngIf="loading === 'loading'" class="progress">
-  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">working ...</div>
-</div> -->
-
-<button mat-raised-button color="primary" *ngIf="videos.length !== 0" (click)="onClick()" [disabled]="selectedIds.length === 0">Download selected</button>
-
-<br>
-<br>
-
-<mat-card *ngFor="let video of videos" class="mb-3" [class.bg-success]="selectedIds.indexOf(video.id) !== -1">
+<div class="text-center" *ngIf="videos.length !== 0">
+  <button mat-raised-button  [matBadge]="selectedVideos.length" matBadgePosition="before" matBadgeColor="accent" color="primary" (click)="onClick()" [disabled]="selectedVideos.length === 0">Download selected</button>
+</div>
+  
+  <br>
+  
+<mat-card *ngFor="let video of videos" class="mt-card mb-3 mx-auto" [class.bg-selected]="selectedVideos.indexOf(video) !== -1">
   <mat-card-header>
     <div mat-card-avatar>
-      <mat-checkbox [id]="video.id"></mat-checkbox>
+      <mat-checkbox (click)="onSelectVideo(video)"></mat-checkbox>
     </div>
     <mat-card-title>{{ video.title }}</mat-card-title>
-    <mat-card-subtitle>Subtitle</mat-card-subtitle>
+    <mat-card-subtitle>{{ video.albart }} / {{ video.alb }}</mat-card-subtitle>
   </mat-card-header>
-  <img [src]="video.imageUrl" [alt]="video.title" style="cursor: pointer">
-  <mat-card-content>
-    <p>
-      The Shiba
-    </p>
-  </mat-card-content>
+  <img mat-card-image [src]="video.imageUrl" [alt]="video.title" style="cursor: pointer">
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="onSelectVideo(video)">Select</button>
-    <button mat-raised-button color="accent">Edit</button>
+    <button mat-button color="primary">Edit</button>
   </mat-card-actions>
 </mat-card>
-
-
-<!-- <div *ngFor="let video of videos" class="card shadow mb-4 rounded" [class.bg-success]="selectedIds.indexOf(video.id) !== -1">
-  <div class="card-body">
-    <div class="row">
-      <div class="col-sm-8">
-        <div class="form-group">
-          <label class="label">Video Titel</label>
-          <input type="text" class="form-control" [(ngModel)]="video.title">
-        </div>
-        <div class="form-group">
-          <label class="label">Video ID</label>
-          <input type="text" class="form-control" [(ngModel)]="video.id" readonly>
-        </div>
-        <div class="form-group">
-          <label class="label">Path</label>
-          <input type="text" class="form-control" [(ngModel)]="video.albart + '/' + video.alb" readonly>
-        </div>
-        
-        
-      </div>
-      <div class="col-sm my-auto">
-        <div class="mx-auto">
-          <img [src]="video.imageUrl" [alt]="video.title" class="img-fluid rounded" style="cursor: pointer" (click)="onSelectVideo(video)">
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
