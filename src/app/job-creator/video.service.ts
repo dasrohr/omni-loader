@@ -7,7 +7,9 @@ import { HttpParameterVideoId, HttpParameterPlaylistId, HttpParameterSearch } fr
 @Injectable()
 export class VideoService {
   private videos: Video[] = [];
+  private selectedVideos :Video[] = [];
   videoDataReceived = new EventEmitter<Video[]>();
+  selectedVideosChanged = new EventEmitter<Video[]>();
   apiLoading = new EventEmitter<string>();
 
   constructor(private http :HttpClient) {}
@@ -50,9 +52,26 @@ export class VideoService {
           var imageUrl = result.snippet.thumbnails.medium.url;
 
           this.addVideo(new Video(id, title, provider, imageUrl, albart, alb));
-        }
-      }
+        };
+      };
       this.apiLoading.emit('loaded');
     });
   }
+
+  addSelectedVideo(video :Video) {
+    this.selectedVideos.push(video);
+    this.selectedVideosChanged.emit(this.selectedVideos);
+  }
+
+  getSelectedVideos() :Video[] {
+    return this.selectedVideos;
+  }
+
+  removeSelectedVideo(video: Video) {
+    this.selectedVideos = this.selectedVideos.filter( ( toFilter ) => {
+      return toFilter.id !== video.id; 
+    });
+    this.selectedVideosChanged.emit(this.selectedVideos);
+  }
+
 }
