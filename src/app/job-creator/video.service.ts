@@ -3,6 +3,7 @@ import { Injectable, EventEmitter } from "@angular/core";
 import { Video } from "./video.model";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { HttpParameterVideoId, HttpParameterPlaylistId, HttpParameterSearch } from "./http-parameter-youtube.model";
+import { OmniApiService } from "./api.service";
 
 @Injectable()
 export class VideoService {
@@ -12,7 +13,12 @@ export class VideoService {
   selectedVideosChanged = new EventEmitter<Video[]>();
   apiLoading = new EventEmitter<string>();
 
-  constructor(private http :HttpClient) {}
+  constructor(
+    private http :HttpClient,
+    private apiService :OmniApiService
+  ) {
+    this.apiService.tasksCreated.subscribe( () => this.clearSelectedVideos() )
+  }
 
   getVideos() {
     return this.videos.slice();
@@ -72,6 +78,11 @@ export class VideoService {
       return toFilter.id !== video.id; 
     });
     this.selectedVideosChanged.emit(this.selectedVideos);
+  }
+
+  clearSelectedVideos() {
+    this.selectedVideos = [];
+    this.selectedVideosChanged.emit( this.selectedVideos );
   }
 
 }
