@@ -9,6 +9,7 @@ export class OmniApiService {
   private apiUrl = 'http://' + environment.api.host + ':' + environment.api.port;
   albartDataReceived = new EventEmitter<{}>();
   albDataReceived = new EventEmitter<{}>();
+  tasksCreated = new EventEmitter();
 
   constructor(private http :HttpClient) {}
 
@@ -25,11 +26,11 @@ export class OmniApiService {
     })
   }
 
-  createDownloadTask( videos: Video[] ) {
-    console.log('create task');
+  createDownloadTasks( videos: Video[] ) {
     for ( var video of videos ) {
-      console.log(video);
-      this.http.post( this.apiUrl + '/task/download', video ).subscribe( data => console.log(data))
+      console.log( video )
+      this.http.post( this.apiUrl + '/task/download', video ).subscribe( data => console.log( data ) );
     }
+    this.tasksCreated.emit();
   }
 }
