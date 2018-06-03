@@ -17,11 +17,13 @@ export class JobCreatorComponent implements OnInit {
   albartAvailable :string[];
   albAvailable :string[];
 
-  constructor(private videoService: VideoService,
-              private omniApiService : OmniApiService,
-              private formBuilder: FormBuilder,
-              private router: Router,
-              private route: ActivatedRoute) { }
+  constructor(
+    private videoService: VideoService,
+    private omniApiService : OmniApiService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     this.formText = {
@@ -45,6 +47,8 @@ export class JobCreatorComponent implements OnInit {
     this.omniApiService.albDataReceived.subscribe( ( data :string[] ) => {
       this.albAvailable = data;
     });
+
+    this.omniApiService.tasksCreated.subscribe( () => this.formRebuild() );
 
     this.inputForm.get('alb').disable();
     this.formChanges();
@@ -77,6 +81,7 @@ export class JobCreatorComponent implements OnInit {
     });
     this.albAvailable = [];
     this.albartAvailable = [];
+    this.videoService.clearSelectedVideos();
     this.omniApiService.getExistingAlbart();
   }
 
